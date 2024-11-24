@@ -1,0 +1,5 @@
+﻿  RatingInterraction.cpp
+D:\Projects\Optimization\LR7\RatingInterraction.cpp(97,12): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+D:\Projects\Optimization\LR7\RatingInterraction.cpp(100,22): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+D:\Projects\Optimization\LR7\RatingInterraction.cpp(122,12): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+  LR7.vcxproj -> D:\Projects\Optimization\LR7\x64\Debug\LR7.exe
