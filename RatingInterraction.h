@@ -35,6 +35,8 @@ public:
 	int getMin(int numOfCond);
 	vector<pair<string, vector<double>>> makeWeightTable();
 	void sortByElement(vector<pair<string, vector<double>>>& resultTable, size_t index);
+	
 };
 
+bool sortVecPair(pair<int, double> d1, pair<int, double> d2);
 void printQuit();

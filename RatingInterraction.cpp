@@ -242,24 +242,68 @@ void RatingInterraction::sortByElement(vector<pair<string, vector<double>>>& res
 		});
 }
 
+bool sortVecPair(pair<int, double> d1, pair<int, double> d2)
+{
+	return d1.second < d2.second;
+}
+
 vector<pair<string, vector<double>>> RatingInterraction::makeWeightTable()
 {
+	int method;
+	cout << "Выберите способ: ";
+	cin >> method;
+	cin.clear();
+	cin.ignore();
+
 	if (expRates.empty()) throw exception("Экспертные оценки отсутствуют");
 
 	vector<pair<string, vector<double>>> resultTable;
-
 	for (int i = 0; i < _cnt; i++)
 	{
 		string curFullname = _table[i].first;
 		vector<double> curCoefs;
-		for (int j = 0; j < _conditions; j++)
+
+		if (method == 1)
 		{
-			int max = getMax(j), min = getMin(j);
-			double curCoef = 0.0;
-			if (_targetConds[j]) curCoef = (double)(max - _table[i].second[j]) / (max - min);
-			else curCoef = (double)(_table[i].second[j] - min) / (max - min);
-			curCoefs.push_back(curCoef);
+			for (int j = 0; j < _conditions; j++)
+			{
+				vector<pair<int, double>> temp;
+				for (int k = 0; k < _cnt; k++)
+				{
+					temp.push_back(make_pair(k, _table[k].second[j]));
+				}
+				sort(temp.begin(), temp.end(), sortVecPair);
+				for (int k = 0; k < _cnt; k++)
+				{
+					if (temp[k].first == i) curCoefs.push_back(k + 1);
+				}
+
+				//curCoefs.push_back();
+			}
 		}
+		else if (method == 2)
+		{
+			for (int j = 0; j < _conditions; j++)
+			{
+				int max = getMax(j);
+				double curCoef = 0.0;
+				if (_targetConds[j]) curCoef = (double)_table[i].second[j] / max;
+				else curCoef = (double)(1.0 - _table[i].second[j]) / max;
+				curCoefs.push_back(curCoef);
+			}
+		}
+		else if (method == 3)
+		{
+			for (int j = 0; j < _conditions; j++)
+			{
+				int max = getMax(j), min = getMin(j);
+				double curCoef = 0.0;
+				if (_targetConds[j]) curCoef = (double)(max - _table[i].second[j]) / (max - min);
+				else curCoef = (double)(_table[i].second[j] - min) / (max - min);
+				curCoefs.push_back(curCoef);
+			}
+		}
+		else throw exception("Не существует способа " + method);
 
 		double overallCoef = 0.0;
 		for (int j = 0; j < _conditions; j++)
