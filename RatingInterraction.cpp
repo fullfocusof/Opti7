@@ -228,7 +228,7 @@ int RatingInterraction::getMin(int numOfCond)
 	return min;
 }
 
-void RatingInterraction::sortByElement(vector<pair<string, vector<double>>>& resultTable, size_t index)
+void RatingInterraction::sortByElementDesc(vector<pair<string, vector<double>>>& resultTable, size_t index)
 {
 	for (const auto& pair : resultTable)
 	{
@@ -239,6 +239,29 @@ void RatingInterraction::sortByElement(vector<pair<string, vector<double>>>& res
 		[index](const pair<string, vector<double>>& a, const pair<string, vector<double>>& b)
 		{
 			return a.second[index] < b.second[index];
+		});
+}
+
+void RatingInterraction::sortByElementAsc(vector<pair<string, vector<double>>>& resultTable, size_t index)
+{
+	for (const auto& pair : resultTable)
+	{
+		if (index >= pair.second.size()) throw exception("Индекс выходит за границы массива");
+	}
+
+	sort(resultTable.begin(), resultTable.end(),
+		[index](const pair<string, vector<double>>& a, const pair<string, vector<double>>& b)
+		{
+			return a.second[index] > b.second[index];
+		});
+}
+
+void RatingInterraction::sortByElementAscEvalMethod(vector<pair<int, double>>& tempVec)
+{
+	sort(tempVec.begin(), tempVec.end(),
+		[](const pair<int, double>& a, const pair<int, double>& b)
+		{
+			return a.second > b.second;
 		});
 }
 
@@ -272,10 +295,13 @@ vector<pair<string, vector<double>>> RatingInterraction::makeWeightTable()
 				{
 					temp.push_back(make_pair(k, _table[k].second[j]));
 				}
-				sort(temp.begin(), temp.end(), sortVecPair);
+				
+				sortByElementAscEvalMethod(temp);
+
 				for (int k = 0; k < _cnt; k++)
 				{
-					if (temp[k].first == i) curCoefs.push_back(k + 1);
+					if (_targetConds[j] && temp[k].first == i) curCoefs.push_back(_cnt - k);
+					else if (!_targetConds[j] && temp[k].first == i) curCoefs.push_back(k + 1);
 				}
 
 				//curCoefs.push_back();
@@ -317,7 +343,11 @@ vector<pair<string, vector<double>>> RatingInterraction::makeWeightTable()
 
 	try
 	{
-		sortByElement(resultTable, resultTable[0].second.size() - 1);
+		if (method == 1 || method == 2)
+		{
+			sortByElementAsc(resultTable, resultTable[0].second.size() - 1);
+		}
+		else sortByElementDesc(resultTable, resultTable[0].second.size() - 1);
 	}
 	catch (const exception& ex)
 	{

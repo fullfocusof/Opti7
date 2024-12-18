@@ -34,7 +34,9 @@ public:
 	int getMax(int numOfCond);
 	int getMin(int numOfCond);
 	vector<pair<string, vector<double>>> makeWeightTable();
-	void sortByElement(vector<pair<string, vector<double>>>& resultTable, size_t index);
+	void sortByElementDesc(vector<pair<string, vector<double>>>& resultTable, size_t index);
+	void sortByElementAsc(vector<pair<string, vector<double>>>& resultTable, size_t index);
+	void sortByElementAscEvalMethod(vector<pair<int, double>>& tempVec);
 	
 };
 
